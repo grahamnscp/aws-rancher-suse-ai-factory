@@ -1,0 +1,67 @@
+#!/bin/bash
+
+source ./utils/utils.sh
+
+LogStarted "=====================> Deploying suse instances.."
+
+Log "===========> Provisioning infra via terraform.."
+cd tf
+terraform apply -auto-approve
+cd ..
+Log ">> sleep 60"
+sleep 60
+LogElapsedDuration
+
+
+# Rancher Manager Node
+LogStarted "===========> Installing RKE2 on rancher node.."
+bash scripts/install-rke2.sh "rancher"
+LogElapsedDuration
+Log ">> sleep 30"
+sleep 30
+
+LogStarted "===========> Installing Rancher.."
+bash scripts/install-rancher.sh
+LogElapsedDuration
+Log ">> sleep 30"
+sleep 30
+
+LogStarted "===========> Performing Extra Rancher Config on rancher node.."
+bash scripts/rancher-extra-config.sh
+LogElapsedDuration
+
+
+# SUSE AI GPU Node Cluster
+LogStarted "===========> Checking Nvidia driver on suseai cluster.."
+bash scripts/suseai-nvidia-check.sh
+LogElapsedDuration
+
+LogStarted "===========> Installing RKE2 on suseai cluster.."
+bash scripts/install-rke2.sh "suseai"
+LogElapsedDuration
+Log ">> sleep 60"
+sleep 60
+
+LogStarted "===========> Registering suseai cluster with rancher manager.."
+bash scripts/suseai-register-with-rancher.sh
+LogElapsedDuration
+Log ">> sleep 60"
+sleep 60
+
+LogStarted "===========> Adding application repos to suseai cluster.."
+bash scripts/suseai-extra-config.sh
+LogElapsedDuration
+Log ">> sleep 15"
+sleep 15
+
+LogStarted "===========> Deploying longhorn storage to suseai cluster.."
+bash scripts/suseai-longhorn.sh
+Log ">> sleep 15"
+sleep 15
+
+LogStarted "===========> Installing gpu-operator to suseai cluster.."
+bash scripts/suseai-gpu-operator.sh
+
+LogCompleted "=====================> Done."
+echo "Done."
+

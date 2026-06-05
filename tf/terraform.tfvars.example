@@ -1,0 +1,59 @@
+# aws-cli Profile to use
+aws_profile = "default"
+
+# tags to use on the AWS resources (default_tags)
+aws_tags = {
+     Owner          = "me"
+     expirationDate = "2026-06-30"
+     Purpose        = "DemoTest"
+}
+
+# Prefix name that we prepend to the resource names
+prefix = "me"
+
+# route53 hosted zone
+route53_zone_id   = "XXXXXXXXXXXXXXXXXXXXX"
+route53_domain    = "mydomain.com"
+route53_subdomain = "test"
+
+# AWS EC2 instance type
+# t3.small      2 vcpu -  2GB mem - $0.0208/hr
+# t3.medium     2 vcpu -  4GB mem - $0.0418/hr
+# t3.large      2 vcpu -  8GB mem - $0.0835/hr
+# t3.xlarge     4 vcpu - 16GB mem - $0.1670/hr
+# t3.2xlarge    8 vcpu - 32GB mem - $0.3341/hr
+#aws_instance_type = "t3.medium"
+aws_instance_type = "t3.xlarge"
+
+# Accelerated compute us-east-1:
+# p3.2xlarge   $3.06     8   61 GiB  EBS Only             Up to 10 Gigabit
+# g6.2xlarge   $0.9776   8   32 GiB  1 x 450 GB NVMe SSD  Up to 10 Gigabit
+# g6e.2xlarge  $2.24208  8   64 GiB  1 x 450 GB NVMe SSD  Up to 20 Gigabit
+# g5.2xlarge   $1.212    8   32 GiB  1 x 450 GB NVMe SSD  Up to 10 Gigabit
+# g5g.2xlarge  $0.556    8   16 GiB  EBS Only             Up to 10 Gigabit
+# g4ad.2xlarge $0.54117  8   32 GiB  300 GB NVMe SSD      Up to 10 Gigabit
+# g4dn.2xlarge $0.752    8   32 GiB  225 GB NVMe SSD      Up to 25 Gigabit
+# f1.2xlarge   $1.65     8  122 GiB  1 x 470 NVMe SSD     Up to 10 Gigabit
+# trn1.2xlarge $1.34375  8   32 GiB  1 x 475 NVMe SSD     12500 Megabit
+# inf1.2xlarge $0.362    8   16 GiB  EBS Only             Up to 25 Gigabit
+aws_instance_type_gpu = "g4dn.2xlarge"
+
+# AWS EC2 ami
+# Active images: https://pint.suse.com/?resource=images&search=sles-15-sp7&csp=amazon&region=us-east-1&state=active
+# aws ec2 describe-images --filters "Name=name,Values=suse-sles-15-sp7-v2026*" "Name=name,Values=*x86_64" --region us-east-1 --query "Images[0].{Name:Name,ImageId:ImageId}"
+#
+# sles sp7 ami (suse-sles-15-sp7-v20260123-hvm-ssd-x86_64)
+aws_ami = "ami-0f73daf11ea661052"
+
+# AWS EC2 instance volume sizes (in GB)
+volume_size_root = "100"
+volume_size_root_gpu = "200"
+volume_size_second_disk_gpu = "400"
+
+# Existing AWS SSH key-pair name - https://docs.aws.amazon.com/console/ec2/key-pairs
+aws_key_name = "awsme"
+
+# ingress CIDRs
+ip_cidr_me = "XX.XX.XX.XXX/32"
+ip_cidr_work = "YYY.YYY.YYY.YYY/32"
+
