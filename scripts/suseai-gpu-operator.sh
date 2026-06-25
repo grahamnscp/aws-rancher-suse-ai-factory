@@ -110,12 +110,6 @@ kubectl --kubeconfig=./local/suseai-admin.conf create secret docker-registry app
   --docker-server=dp.apps.rancher.io --docker-username=$APPCOL_USER --docker-password=$APPCOL_TOKEN \
   -n suse-ai
 
-Log "\_Listing Kubernetes RuntimeClasses:"
-kubectl --kubeconfig=./local/suseai-admin.conf get RuntimeClass
-
-Log "\_Nvidia test pod logs:"
-kubectl --kubeconfig=./local/suseai-admin.conf logs pod/nbody-gpu-benchmark
-
 
 # ----------------------------
 # install cert manager
@@ -137,6 +131,16 @@ helm upgrade --kubeconfig=./local/suseai-admin.conf --install cert-manager \
   --set global.imagePullSecrets={application-collection}
 
 #  --set 'global.imagePullSecrets[0].name'=application-collection
+
+
+# ----------------------------
+# nvidia runtime checks
+
+Log "\_CHECK: Listing Kubernetes RuntimeClasses:"
+kubectl --kubeconfig=./local/suseai-admin.conf get RuntimeClass
+
+Log "\_CHECK: Nvidia test pod logs:"
+kubectl --kubeconfig=./local/suseai-admin.conf logs pod/nbody-gpu-benchmark
 
 
 # --------------------------------------------------------------------

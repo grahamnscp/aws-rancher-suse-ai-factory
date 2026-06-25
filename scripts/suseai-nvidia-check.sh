@@ -21,7 +21,7 @@ function checkagentx
 # -------------------------------------------------------------------------------------
 # Main
 #
-Log "Checking suseai gpu node ready (looping until instance up).."
+Log "CHECK: Checking suseai gpu node ready (looping until instance up).."
 
 while true
 do
