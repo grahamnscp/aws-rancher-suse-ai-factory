@@ -56,11 +56,13 @@ sleep 15
 
 LogStarted "===========> Deploying longhorn storage to suseai cluster.."
 bash scripts/suseai-longhorn.sh
+LogElapsedDuration
 Log ">> sleep 15"
 sleep 15
 
 LogStarted "===========> Installing gpu-operator to suseai cluster.."
 bash scripts/suseai-gpu-operator.sh
+LogElapsedDuration
 
 LogCompleted "=====================> Done."
 echo "Done."
