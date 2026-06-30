@@ -3,6 +3,7 @@
 source ./params.sh
 source ./utils/utils.sh
 source ./utils/load-tf-output.sh
+source ./utils/detect-os.sh
 
 CLUSTER=$1
 CLUSTER=${CLUSTER:=rancher}
@@ -76,12 +77,20 @@ EOF
   mkdir -p ./local
   if [[ "$INSTALLON" == "rancher" ]] ; then
     scp $SSH_OPTS ${SSH_USERNAME}@${NODEIP}:~/admin.conf ./local/rancher-admin.conf
-    sed -i '' "s/127.0.0.1/rancher-rke.$DOMAINNAME/g" ./local/rancher-admin.conf
+    if [[ "$OS_TYPE" == "Mac" ]] ; then
+      sed -i '' "s/127.0.0.1/rancher-rke.$DOMAINNAME/g" ./local/rancher-admin.conf
+    else
+      sed -i "s/127.0.0.1/rancher-rke.$DOMAINNAME/g" ./local/rancher-admin.conf
+    fi
     chmod 600 ./local/rancher-admin.conf
   fi
   if [[ "$INSTALLON" == "suseai" ]] ; then
     scp $SSH_OPTS ${SSH_USERNAME}@${NODEIP}:~/admin.conf ./local/suseai-admin.conf
-    sed -i '' "s/127.0.0.1/suseai-rke.$DOMAINNAME/g" ./local/suseai-admin.conf
+    if [[ "$OS_TYPE" == "Mac" ]] ; then
+      sed -i '' "s/127.0.0.1/suseai-rke.$DOMAINNAME/g" ./local/suseai-admin.conf
+    else
+      sed -i "s/127.0.0.1/suseai-rke.$DOMAINNAME/g" ./local/suseai-admin.conf
+    fi
     chmod 600 ./local/suseai-admin.conf
   fi
 
