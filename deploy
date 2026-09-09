@@ -30,6 +30,10 @@ LogStarted "===========> Performing Extra Rancher Config on rancher node.."
 bash scripts/rancher-extra-config.sh
 LogElapsedDuration
 
+LogStarted "===========> Performing SUSE AI Factory Config on rancher node.."
+bash scripts/rancher-ai-factory-config.sh
+LogElapsedDuration
+
 
 # SUSE AI GPU Node Cluster
 LogStarted "===========> Checking Nvidia driver on suseai cluster.."
@@ -48,20 +52,13 @@ LogElapsedDuration
 Log ">> sleep 60"
 sleep 60
 
-LogStarted "===========> Adding application repos to suseai cluster.."
-bash scripts/suseai-extra-config.sh
-LogElapsedDuration
-Log ">> sleep 15"
-sleep 15
-
-LogStarted "===========> Deploying longhorn storage to suseai cluster.."
-bash scripts/suseai-longhorn.sh
-LogElapsedDuration
-Log ">> sleep 15"
-sleep 15
-
 LogStarted "===========> Installing gpu-operator to suseai cluster.."
 bash scripts/suseai-gpu-operator.sh
+LogElapsedDuration
+
+LogStarted "===========> Preparing suseai cluster for app deployment.."
+bash scripts/suseai-cert-manager.sh
+bash scripts/suseai-longhorn.sh
 LogElapsedDuration
 
 LogCompleted "=====================> Done."

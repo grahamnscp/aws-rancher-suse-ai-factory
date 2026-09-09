@@ -94,44 +94,6 @@ helm upgrade --kubeconfig=./local/suseai-admin.conf --install gpu-operator nvidi
 Log "\__Sleeping for 60 seconds"
 sleep 60
 
-# --------------------------------------------------------------------
-
-Log "Preparing for downstream cluster suseai general component deployment.."
-
-Log "\_Creating suse-ai namespace.."
-kubectl --kubeconfig=./local/suseai-admin.conf create namespace suse-ai
-
-# suse application collection auth
-Log "\_Authenticating local helm cli to SUSE Application Collection registry.."
-helm registry login dp.apps.rancher.io -u $APPCOL_USER -p $APPCOL_TOKEN
-
-Log "\_Creating a docker-registry secret for SUSE Application Collection.."
-kubectl --kubeconfig=./local/suseai-admin.conf create secret docker-registry application-collection \
-  --docker-server=dp.apps.rancher.io --docker-username=$APPCOL_USER --docker-password=$APPCOL_TOKEN \
-  -n suse-ai
-
-
-# ----------------------------
-# install cert manager
-
-Log "\_Creating cert-manager namespace.."
-kubectl --kubeconfig=./local/suseai-admin.conf create namespace cert-manager
-
-Log "\_Creating application-collection secret for cert-manager.."
-kubectl --kubeconfig=./local/suseai-admin.conf create secret docker-registry application-collection \
-  --docker-server=dp.apps.rancher.io --docker-username=$APPCOL_USER --docker-password=$APPCOL_TOKEN \
-  -n cert-manager
-
-Log "\_Installing cert-manager on suseai.."
-helm upgrade --kubeconfig=./local/suseai-admin.conf --install cert-manager \
-  oci://dp.apps.rancher.io/charts/cert-manager \
-  -n cert-manager \
-  --timeout=5m \
-  --set crds.enabled=true \
-  --set global.imagePullSecrets={application-collection}
-
-#  --set 'global.imagePullSecrets[0].name'=application-collection
-
 
 # ----------------------------
 # nvidia runtime checks
